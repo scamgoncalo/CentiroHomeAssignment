@@ -57,9 +57,15 @@ namespace CentiroHomeAssignment
 
             app.UseEndpoints(endpoints =>
             {
+                // If desired to start in the Home controller
+                /*
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                */
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Orders}/{action=GetAll}");
             });
         }
     }
