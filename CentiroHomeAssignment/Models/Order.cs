@@ -8,6 +8,9 @@ namespace CentiroHomeAssignment.Models
 {
     public class Order
     {
+        // Since there are no foreseeable future a relational table at the moment, no foreign key was added
+        // [ForeignKey(name string)]
+
         [Key]
         public int Id { get; set; }
         public int OrderNumber { get; set; }
