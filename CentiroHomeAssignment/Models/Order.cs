@@ -18,7 +18,7 @@ namespace CentiroHomeAssignment.Models
         public string Description { get; set; }
         public double Price { get; set; }
         public string ProductGroup { get; set; }
-        public int OrderDate { get; set; }
+        public string OrderDate { get; set; }
         public string CustomerName { get; set; }
         public int CustomerNumber { get; set; }
 
