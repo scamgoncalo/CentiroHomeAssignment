@@ -1,5 +1,6 @@
 ﻿using CentiroHomeAssignment.Data;
 using CentiroHomeAssignment.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -20,7 +21,7 @@ namespace CentiroHomeAssignment.Services
             _db = db;
         }
 
-        public List<Order> LoadFiles(FileHandler fileHandler)
+        public async Task<List<Order>> LoadFiles(FileHandler fileHandler)
         {
             List<Order> newOrders = new List<Order>();
 
@@ -30,7 +31,7 @@ namespace CentiroHomeAssignment.Services
             foreach (var order in ordersInFiles)
             {
                 // Verify if Order exists in DB
-                Order orderFromDb = OrderAlreadyExists(order);
+                Order orderFromDb = await OrderAlreadyExists(order);
 
                 // if order is new
                 if (orderFromDb == null || object.Equals(orderFromDb, default(Order)))
@@ -41,12 +42,12 @@ namespace CentiroHomeAssignment.Services
                 return newOrders;
         }
 
-        private Order OrderAlreadyExists(Order ord)
+        private async Task<Order> OrderAlreadyExists(Order ord)
         {
-            return _db.Order.Where(
+            return await _db.Order.Where(
                         o => (o.OrderNumber == ord.OrderNumber) &&
                            (o.OrderLineNumber == ord.OrderLineNumber)
-                        ).FirstOrDefault();
+                        ).FirstOrDefaultAsync();
         }
     }
 }

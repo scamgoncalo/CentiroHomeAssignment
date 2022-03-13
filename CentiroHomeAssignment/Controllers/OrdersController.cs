@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using CentiroHomeAssignment.Data;
 using CentiroHomeAssignment.Models;
 using CentiroHomeAssignment.Services;
@@ -50,9 +51,10 @@ namespace CentiroHomeAssignment.Controllers
 
         /// <summary>
         /// Create Order(s) - import from files
+        /// Parsing the files can take several time, so async method is used
         /// </summary>
         /// <returns></returns>
-        public IActionResult CreateFromFiles()
+        public async Task<IActionResult> CreateFromFiles()
         {
             //Get Path to import files from appSettings.json
             ImporterOptions options = new ImporterOptions();
@@ -61,7 +63,7 @@ namespace CentiroHomeAssignment.Controllers
 
             ImporterService import = new ImporterService(_db, options);
             TxtHandler txtHandler = new TxtHandler();
-            var orders = import.LoadFiles(txtHandler);
+            var orders = await import.LoadFiles(txtHandler);
 
             orders.ForEach(x => _db.Order.Add(x));
             _db.SaveChanges();
