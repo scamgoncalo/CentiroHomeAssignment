@@ -1,15 +1,13 @@
 ﻿@model IEnumerable<CentiroHomeAssignment.Models.Order>
 
 @{
-    ViewData["Title"] = "GetAll";
+    ViewData["Title"] = "GetByOrderNumber";
 }
 
-<h1>GetAll</h1>
+<h1>GetByOrderNumber</h1>
 
 <p>
-    <a asp-controller="Orders" asp-action="Create" class="btn btn-primary">Create New Order</a>
-    <a asp-controller="Orders" asp-action="CreateFromFiles" class="btn btn-primary">Import Orders via Files</a>
-    <a asp-controller="Orders" asp-action="DeleteAll" class="btn btn-danger">Delete all</a>
+
 </p>
 <table class="table">
     <thead>
@@ -54,7 +52,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                <a asp-action="GetByOrderNumber" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.OrderNumber)</a>
+                @Html.DisplayFor(modelItem => item.OrderNumber)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OrderLineNumber)
@@ -96,3 +94,7 @@
 }
     </tbody>
 </table>
+
+<div>
+    <a asp-action="GetAll">Back to Main List</a>
+</div>

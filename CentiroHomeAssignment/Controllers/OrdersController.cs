@@ -90,6 +90,27 @@ namespace CentiroHomeAssignment.Controllers
         }
 
         /// <summary>
+        /// Delete all Orders 
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult DeleteAll()
+        {
+            IEnumerable<Order> orders = _db.Order;
+
+            if(orders != null)
+            {
+                foreach (var order in orders)
+                {
+                    _db.Order.Remove(order);
+                }
+
+                _db.SaveChanges();
+            }
+
+            return RedirectToAction("GetAll");
+        }
+
+        /// <summary>
         /// Delete Order with id
         /// </summary>
         /// <returns></returns>
@@ -161,15 +182,28 @@ namespace CentiroHomeAssignment.Controllers
         }
 
         /// <summary>
-        /// Get Orders with same number
+        /// Edit Order with id
         /// </summary>
-        /// <param name="orderNumber"></param>
         /// <returns></returns>
-        public IActionResult GetByOrderNumber(string orderNumber)
+        public IActionResult GetByOrderNumber(int? id)
         {
-            // TODO: Return the specific order to a view
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
 
-            throw new NotImplementedException();
+            var order = _db.Order.Find(id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            IEnumerable<Order> orders = _db.Order.Where(
+                        o => o.OrderNumber == order.OrderNumber
+                        );
+
+            return View(orders);
         }
     }
 }
