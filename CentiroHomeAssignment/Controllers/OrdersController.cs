@@ -60,7 +60,8 @@ namespace CentiroHomeAssignment.Controllers
             options.Pattern = _configuration["Import:Pattern"];
 
             ImporterService import = new ImporterService(_db, options);
-            var orders = import.LoadFiles();
+            TxtHandler txtHandler = new TxtHandler();
+            var orders = import.LoadFiles(txtHandler);
 
             orders.ForEach(x => _db.Order.Add(x));
             _db.SaveChanges();
