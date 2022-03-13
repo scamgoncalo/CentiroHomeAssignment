@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CentiroHomeAssignment.Data;
 using CentiroHomeAssignment.Models;
+using CentiroHomeAssignment.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CentiroHomeAssignment.Controllers
@@ -29,9 +30,28 @@ namespace CentiroHomeAssignment.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Order ord)
         {
             _db.Order.Add(ord);
+            _db.SaveChanges();
+            // Display all Orders
+            return RedirectToAction("GetAll");
+        }
+
+        /// <summary>
+        /// Create Order - post request
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult CreateFromFiles()
+        {
+            //Get Path to import files from appSettings.json
+            var path = "./App_Data/Order2.txt";
+
+            ImporterService import = new ImporterService(_db, path);
+            var orders = import.LoadFile();
+
+            orders.ForEach(x => _db.Order.Add(x));
             _db.SaveChanges();
             // Display all Orders
             return RedirectToAction("GetAll");
