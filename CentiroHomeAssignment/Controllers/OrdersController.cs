@@ -4,16 +4,19 @@ using CentiroHomeAssignment.Data;
 using CentiroHomeAssignment.Models;
 using CentiroHomeAssignment.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace CentiroHomeAssignment.Controllers
 {
     public class OrdersController : Controller
     {
-        public readonly ApplicationDbContext _db;
+        private readonly ApplicationDbContext _db;
+        private readonly IConfiguration _configuration;
 
-        public OrdersController(ApplicationDbContext db)
+        public OrdersController(ApplicationDbContext db, IConfiguration configuration)
         {
             _db = db;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -46,10 +49,12 @@ namespace CentiroHomeAssignment.Controllers
         public IActionResult CreateFromFiles()
         {
             //Get Path to import files from appSettings.json
-            var path = "./App_Data/Order2.txt";
+            ImporterOptions options = new ImporterOptions();
+            options.Directory = _configuration["Import:DirectoryPath"];
+            options.Pattern = _configuration["Import:Pattern"];
 
-            ImporterService import = new ImporterService(_db, path);
-            var orders = import.LoadFile();
+            ImporterService import = new ImporterService(options);
+            var orders = import.LoadFiles();
 
             orders.ForEach(x => _db.Order.Add(x));
             _db.SaveChanges();
