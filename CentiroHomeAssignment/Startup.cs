@@ -65,7 +65,7 @@ namespace CentiroHomeAssignment
                 */
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Orders}/{action=GetAll}");
+                    pattern: "{controller=Orders}/{action=GetAll}/{id?}");
             });
         }
     }

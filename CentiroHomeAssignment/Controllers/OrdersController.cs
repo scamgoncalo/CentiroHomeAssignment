@@ -72,32 +72,82 @@ namespace CentiroHomeAssignment.Controllers
         /// Delete Order with id
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Delete(int? id)
         {
-            var order = _db.Order.Where(
-                        o => o.Id == id
-                        ).FirstOrDefault();
-
-            if (!(order == null) || !(object.Equals(order, default(Order))))
+            if (id == null || id == 0)
             {
-                _db.Order.Remove(order);
-                _db.SaveChanges();
+                return NotFound();
             }
 
-            return RedirectToAction("GetAll");
+            var order = _db.Order.Find(id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return View(order);
         }
 
         /// <summary>
         /// Delete Order with id
         /// </summary>
         /// <returns></returns>
-        public IActionResult Delete()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirm(int? id)
         {
-            
+            var order = _db.Order.Find(id);
 
+            if (order == null) 
+            {
+                return NotFound();
+            }
+
+            _db.Order.Remove(order);
+            _db.SaveChanges();
+            // Display all Orders
             return RedirectToAction("GetAll");
+        }
+
+        /// <summary>
+        /// Edit Order with id
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Edit(int?id)
+        {
+            if(id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var order = _db.Order.Find(id);
+
+            if(order == null)
+            {
+                return NotFound();
+            }
+
+            return View(order);
+        }
+
+        /// <summary>
+        /// Edit Order - post request
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Order ord)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Order.Update(ord);
+                _db.SaveChanges();
+                // Display all Orders
+                return RedirectToAction("GetAll");
+            }
+
+            return View(ord);
         }
 
         /// <summary>
