@@ -12,10 +12,12 @@ namespace CentiroHomeAssignment.Services
     public class ImporterService
     {
         private readonly ImporterOptions _options;
+        private readonly ApplicationDbContext _db;
 
-        public ImporterService(ImporterOptions options)
+        public ImporterService(ApplicationDbContext db, ImporterOptions options)
         {
             _options = options;
+            _db = db;
         }
 
         public List<Order> LoadFiles()
@@ -23,7 +25,7 @@ namespace CentiroHomeAssignment.Services
             List<Order> orders = new List<Order>();
             try
             {
-                // Only get files that begin with the letter "c".
+                // Only get files that follow the correct pattern
                 string[] files = Directory.GetFiles(_options.Directory, _options.Pattern);
                 foreach (string filePath in files)
                 {
@@ -46,17 +48,25 @@ namespace CentiroHomeAssignment.Services
 
                         ord.OrderNumber = int.Parse(data[1].Trim(), NumberFormatInfo.InvariantInfo);
                         ord.OrderLineNumber = int.Parse(data[2].Trim(), NumberFormatInfo.InvariantInfo);
-                        ord.ProductNumber = data[3].Trim();
-                        ord.Quantity = int.Parse(data[4].Trim(), NumberFormatInfo.InvariantInfo);
-                        ord.Name = data[5].Trim();
-                        ord.Description = data[6];
-                        ord.Price = double.Parse(data[7].Trim(), NumberFormatInfo.InvariantInfo);
-                        ord.ProductGroup = data[8].Trim();
-                        ord.OrderDate = DateTime.Parse(data[9].Trim(), NumberFormatInfo.InvariantInfo);
-                        ord.CustomerName = data[10].Trim();
-                        ord.CustomerNumber = int.Parse(data[11].Trim(), NumberFormatInfo.InvariantInfo);
 
-                        orders.Add(ord);
+                        // Verify if Order exists in DB
+                        Order orderFromDb = OrderAlreadyExists(ord);
+
+                        // if order is new
+                        if (orderFromDb == null || object.Equals(orderFromDb, default(Order)))
+                        {
+                            //Following properties are only fetched if order is new
+                            ord.ProductNumber = data[3].Trim();
+                            ord.Quantity = int.Parse(data[4].Trim(), NumberFormatInfo.InvariantInfo);
+                            ord.Name = data[5].Trim();
+                            ord.Description = data[6];
+                            ord.Price = double.Parse(data[7].Trim(), NumberFormatInfo.InvariantInfo);
+                            ord.ProductGroup = data[8].Trim();
+                            ord.OrderDate = DateTime.Parse(data[9].Trim(), NumberFormatInfo.InvariantInfo);
+                            ord.CustomerName = data[10].Trim();
+                            ord.CustomerNumber = int.Parse(data[11].Trim(), NumberFormatInfo.InvariantInfo);
+                            orders.Add(ord);
+                        }
                     }
                 }
             }
@@ -66,6 +76,14 @@ namespace CentiroHomeAssignment.Services
             }
 
             return orders;
+        }
+
+        private Order OrderAlreadyExists(Order ord)
+        {
+            return _db.Order.Where(
+                        o => (o.OrderNumber == ord.OrderNumber) &&
+                           (o.OrderLineNumber == ord.OrderLineNumber)
+                        ).FirstOrDefault();
         }
     }
 }

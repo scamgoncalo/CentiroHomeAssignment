@@ -53,10 +53,10 @@ namespace CentiroHomeAssignment.Controllers
             options.Directory = _configuration["Import:DirectoryPath"];
             options.Pattern = _configuration["Import:Pattern"];
 
-            ImporterService import = new ImporterService(options);
+            ImporterService import = new ImporterService(_db, options);
             var orders = import.LoadFiles();
 
-            orders.ForEach(x => _db.Order.Add(x));
+            orders. ForEach(x => _db.Order.Add(x));
             _db.SaveChanges();
             // Display all Orders
             return RedirectToAction("GetAll");
