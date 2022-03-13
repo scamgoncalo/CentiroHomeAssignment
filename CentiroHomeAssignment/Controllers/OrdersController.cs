@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using CentiroHomeAssignment.Data;
 using CentiroHomeAssignment.Models;
 using CentiroHomeAssignment.Services;
@@ -36,14 +37,19 @@ namespace CentiroHomeAssignment.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Order ord)
         {
-            _db.Order.Add(ord);
-            _db.SaveChanges();
-            // Display all Orders
-            return RedirectToAction("GetAll");
+            if(ModelState.IsValid)
+            {
+                _db.Order.Add(ord);
+                _db.SaveChanges();
+                // Display all Orders
+                return RedirectToAction("GetAll");
+            }
+
+            return View(ord);
         }
 
         /// <summary>
-        /// Create Order - post request
+        /// Create Order(s) - import from files
         /// </summary>
         /// <returns></returns>
         public IActionResult CreateFromFiles()
@@ -56,9 +62,41 @@ namespace CentiroHomeAssignment.Controllers
             ImporterService import = new ImporterService(_db, options);
             var orders = import.LoadFiles();
 
-            orders. ForEach(x => _db.Order.Add(x));
+            orders.ForEach(x => _db.Order.Add(x));
             _db.SaveChanges();
             // Display all Orders
+            return RedirectToAction("GetAll");
+        }
+
+        /// <summary>
+        /// Delete Order with id
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int? id)
+        {
+            var order = _db.Order.Where(
+                        o => o.Id == id
+                        ).FirstOrDefault();
+
+            if (!(order == null) || !(object.Equals(order, default(Order))))
+            {
+                _db.Order.Remove(order);
+                _db.SaveChanges();
+            }
+
+            return RedirectToAction("GetAll");
+        }
+
+        /// <summary>
+        /// Delete Order with id
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Delete()
+        {
+            
+
             return RedirectToAction("GetAll");
         }
 

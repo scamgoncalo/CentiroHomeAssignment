@@ -17,10 +17,12 @@ namespace CentiroHomeAssignment.Models
 
         [DisplayName("Order Number")]
         [Required]
+        [Range(1,int.MaxValue)]
         public int OrderNumber { get; set; }
 
         [DisplayName("Order Line Number")]
         [Required]
+        [Range(1, int.MaxValue)]
         public int OrderLineNumber { get; set; }
 
         [DisplayName("Product Number")]
@@ -28,11 +30,13 @@ namespace CentiroHomeAssignment.Models
         public string ProductNumber { get; set; }
 
         [Required]
+        [Range(1, int.MaxValue)]
         public int Quantity { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
 
         [Required]
+        [Range(1.0, double.MaxValue)]
         public double Price { get; set; }
 
         [DisplayName("Product Group")]
