@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA8vMUyjSwDkK/0gKdCOZqNQAAAAACAAAAAAADZgAAwAAAABAAAACBbTyUm2FvXWexi3vYf7A2AAAAAASAAACgAAAAEAAAAOjWXT0zVqc7kfpzTauTvL2AAAAAYMfExfUcDE5ZMgDyZeL4gYYDjPoHtyaXe+izmjXlNSqHjSXVuKirhENfTQUKNo6lTls1vaHLhC4V6kym+dtVtAWNPtn0hg0LyNz2wk/JVyoRTwy6mF7rS635l4t1rLibuC1GqtgpBc8aY8nc6DD2AdmSKH2RuhBI5g9qVbsrgBwUAAAA8Nnk/nwdSBQqnm1PGQqYpb5I6sw=</EncryptedPassword>
+    <History>True|2022-03-14T05:06:02.1849316Z;False|2022-03-14T06:04:04.4281182+01:00;False|2022-03-14T06:02:57.4452214+01:00;</History>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DataConnection">
+      <Value>Data Source=tcp:centirohomeassignmentdbserver.database.windows.net,1433%3bInitial Catalog=CentiroHomeAssignment_db%3bUser Id=goncalo.mendes%40centirohomeassignmentdbserver%3bPassword=Nsf5a794</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="CentiroHomeAssignment.Data.ApplicationDbContext">
+      <Value>Data Source=tcp:centirohomeassignmentdbserver.database.windows.net,1433%3bInitial Catalog=CentiroHomeAssignment_db%3bUser Id=goncalo.mendes%40centirohomeassignmentdbserver%3bPassword=Nsf5a794</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>
