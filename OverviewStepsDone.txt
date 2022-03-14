@@ -1,0 +1,14 @@
+Overview of steps done:
+
+- Configure Services and endpoints.
+- Add Model matching Order properties;
+- Create database via migrations;
+- Implement CRUD actions and respective razor pages;
+- Implement files parser:
+	- on button "Import Orders via Files";
+	- respecting the requirement to be escalable and have in mind different files types can be used to import Orders;
+	- using appSettings and DI to know directory of files and pattern;
+	- make parsing action async to not block the UI
+- Add validations;
+- Add Unit Tests for Controller and Service -> More coverage could have been done, but I believe it already shows enough about working with MSTests and Moq;
+- Publish Web App;
